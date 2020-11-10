@@ -1,17 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {createStore} from "redux";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+/*Створили редюсер, який приймає state і дію, яку потрібно зробити з даним state. Кожен action має свій тип(type).В залежності від type вибирається той чи інший case  */
+const reducer = (state=0, action)=>{
+  console.log("reducer works")
+  switch(action.type){
+    case "PLUS" : return state + 1;
+    case "MINUS" : return state - 1;
+    case "PLUS2" : return state + 2;
+    case "MINUS2" : return state - 2;
+    case "MNOG" : return state * 2;
+    case "DILENNYA" : return state / 2;
+    default : return state;
+  }
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const store = createStore(reducer);//створили store і помістили в нього reducer
+
+/*При кліку на елемент з id = "plus, анонімна функція звертається до store а метод dispatch відловлює тип action і передає в редюсер для оброки */
+document.getElementById("plus").addEventListener("click",()=>{
+  store.dispatch({type: "PLUS"})
+})
+
+document.getElementById("minus").addEventListener("click",()=>{
+store.dispatch({type: "MINUS"})
+})
+
+document.getElementById("plus2").addEventListener("click",()=>{
+store.dispatch({type: "PLUS2"})
+})
+document.getElementById("minus2").addEventListener("click",()=>{
+store.dispatch({type: "MINUS2"})
+})
+document.getElementById("mnog").addEventListener("click",()=>{
+store.dispatch({type: "MNOG"})
+})
+document.getElementById("dilennya").addEventListener("click",()=>{
+store.dispatch({type: "DILENNYA"})
+})
+
+/*Функція я виводить в елемент на сторніці по його ід дані зі state */
+const update=()=>{
+  // console.log("state==>>", store.getState())
+  document.getElementById("counter").innerHTML = store.getState();
+}
+
+store.subscribe(update);//Даний метод subscribe, буде викликати метод update коли буде відбуватись зміна в state
